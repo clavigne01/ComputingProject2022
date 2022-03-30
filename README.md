@@ -7,4 +7,4 @@ Dereck:
 I will be coding the tables that will organize the data that is recieved from the pH meter.  This is the 'data gathering' portion of Caileigh's response.
 
 Ben:
-I will be coding the portion that interprets the data from the tables generated to visualize the data
+I will be coding the portion that interprets the data from the tables generated to visualize the pH change over time and also code the equations that will convert the pH to other relevent data values
