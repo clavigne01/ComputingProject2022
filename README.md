@@ -5,3 +5,6 @@ I will be writing a program that will send output to a pH meter and receive the 
 
 Dereck:
 I will be coding the tables that will organize the data that is recieved from the pH meter.  This is the 'data gathering' portion of Caileigh's response.
+
+Ben:
+I will be coding the portion that interprets the data from the tables generated to visualize the data
