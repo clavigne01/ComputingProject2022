@@ -1,0 +1,27 @@
+---
+title: "The Progress Report I"
+author: "Dereck J, Caileigh L, Ben H"
+date: "3/31/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+### Description
+Caileigh Lavigne, Dereck Jernigan, and Ben Hudgens, will be writing a program that will monitor the pH of a reaction, while calculating the pKa, Ka, and the concentration of the unknown solution. 
+
+## Dereck J:
+
+I have added a table to R Markdown, eventually the coded equations will be inserted into the table for organization.
+
+
+
+
+```{r Table}
+Table <- read.table(header=TRUE, text="
+pH    pKa   Ka    Concentration
+0     0     0       0
+")
+
+```
