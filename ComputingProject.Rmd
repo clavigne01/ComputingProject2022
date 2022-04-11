@@ -11,13 +11,27 @@ ser = serial.Serial('/dev/tty.usbserial-1410')
 print(ser.baudrate)
 print(float(ser.read(6)))
 ```
+```{python}
+start_time = time.time()
+seconds = 20
+
+while True:
+  current_time = time.time()
+  elapsed_time = current_time - start_time
+  
+  if elapsed_time > seconds:
+    print("Finished stabilizing:" + str(int(elapsed_time)) + "seconds")
+    break
+```
 
 
 ```{python}
 # This code runs the first calibration of the pH meter
 import serial
 ser = serial.Serial('/dev/tty.usbserial-1410')
+# add loop
 ser.write(b'Cal,mid,7.00\r')
+ser.read(2)
 ```
 
 ```{python}
@@ -25,6 +39,7 @@ ser.write(b'Cal,mid,7.00\r')
 import serial
 ser = serial.Serial('/dev/tty.usbserial-1410')
 ser.write(b'Cal,low,4.00\r')
+ser.read(2)
 ```
 
 ```{python}
@@ -32,6 +47,7 @@ ser.write(b'Cal,low,4.00\r')
 import serial
 ser = serial.Serial('/dev/tty.usbserial-1410')
 ser.write(b'Cal,high,10.00\r')
+ser.read(2)
 ```
 
 ## R Markdown
