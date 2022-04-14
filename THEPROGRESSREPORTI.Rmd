@@ -30,3 +30,4 @@ pH    pKa   Ka    Concentration
 https://files.atlas-scientific.com/pH_EZO_Datasheet.pdf
 https://www.edn.com/how-to-automate-measurements-with-python/
 https://www.adamsmith.haus/python/answers/how-to-create-a-timed-loop-in-python
+https://pyserial.readthedocs.io/en/latest/shortintro.html#opening-serial-ports
