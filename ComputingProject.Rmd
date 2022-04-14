@@ -4,6 +4,8 @@ author:
 date: 
 output: html_document
 ---
+
+
 ```{python}
 # This code shows how to connect to the pH meter and communicate with it
 import serial
@@ -11,7 +13,11 @@ ser = serial.Serial('/dev/tty.usbserial-1410')
 print(ser.baudrate)
 print(float(ser.read(6)))
 ```
+
 ```{python}
+# Possible loop to stabilize the pH readings before calibrations
+import time
+
 start_time = time.time()
 seconds = 20
 
@@ -38,6 +44,7 @@ ser.read(2)
 # This code runs the second calibration of the pH meter
 import serial
 ser = serial.Serial('/dev/tty.usbserial-1410')
+# add loop
 ser.write(b'Cal,low,4.00\r')
 ser.read(2)
 ```
@@ -46,26 +53,24 @@ ser.read(2)
 # This code runs the third calibration of the pH meter
 import serial
 ser = serial.Serial('/dev/tty.usbserial-1410')
+# add loop
 ser.write(b'Cal,high,10.00\r')
 ser.read(2)
 ```
 
-## R Markdown
+```{python}
+print("Enter total amount of ___ added")
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+# inputting the total volume
+volume = input("Enter total volume:")
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
 
-```{r cars}
-summary(cars)
 ```
 
-## Including Plots
+```{python}
+import csv
 
-You can also embed plots, for example:
+fields = ['Volume', 'pH']
 
-```{r pressure, echo=FALSE}
-plot(pressure)
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
