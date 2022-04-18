@@ -88,9 +88,13 @@ Caileigh Lavigne, Dereck Jernigan, and Ben Hudgens, will be writing a program th
 I have added a table to R Markdown, eventually the coded equations will be inserted into the table for organization.
 
 
+## Caileigh Lavigne
+I have located the pH meter that will be used for this project. I have also began looking at material that will help me better understand how to communicate with the pH meter, as well as receive its output data.
+
 
 ```{python}
 from prettytable import PrettyTable
+
 
 # Specify the Column Names while initializing the Table
 myTable = PrettyTable(["Unknown", "pH", "pOH", "pKa", "Concentration"])
@@ -107,3 +111,9 @@ myTable.add_row(["7", "0", "0", "0", "0"])
 print(myTable)
 
 ```
+
+## Websites Consulted
+https://files.atlas-scientific.com/pH_EZO_Datasheet.pdf
+https://www.edn.com/how-to-automate-measurements-with-python/
+https://www.adamsmith.haus/python/answers/how-to-create-a-timed-loop-in-python
+https://pyserial.readthedocs.io/en/latest/shortintro.html#opening-serial-ports

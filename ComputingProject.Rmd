@@ -1,0 +1,99 @@
+---
+title: "pH Meter Project"
+author:
+date: 
+output: html_document
+---
+
+
+```{python}
+# This code shows how to connect to the pH meter and communicate with it
+import serial
+ser = serial.Serial('/dev/tty.usbserial-1410')
+print(ser.baudrate)
+print(float(ser.read(6)))
+```
+
+```{python}
+# Possible loop to stabilize the pH readings before calibrations
+pH_new = float(ser.read(6))
+
+while True:
+  pH_old = pH_new
+  
+  pH_new = float(ser.read(6))
+  pH_diff = abs(pH_new - pH_old)
+  
+  if pH_diff < 0.01:
+    
+    break
+```
+
+
+```{python}
+# This code runs the first calibration of the pH meter
+import serial
+ser = serial.Serial('/dev/tty.usbserial-1410')
+pH_new = float(ser.read(6))
+
+while True:
+  pH_old = pH_new
+  
+  pH_new = float(ser.read(6))
+  pH_diff = abs(pH_new - pH_old)
+  
+  if pH_diff < 0.01:
+    ser.write(b'Cal,mid,7.00\r')
+    ser.read(2)
+```
+
+```{python}
+# This code runs the second calibration of the pH meter
+import serial
+ser = serial.Serial('/dev/tty.usbserial-1410')
+pH_new = float(ser.read(6))
+
+while True:
+  pH_old = pH_new
+  
+  pH_new = float(ser.read(6))
+  pH_diff = abs(pH_new - pH_old)
+  
+  if pH_diff < 0.01:
+  ser.write(b'Cal,low,4.00\r')
+  ser.read(2)
+```
+
+```{python}
+# This code runs the third calibration of the pH meter
+import serial
+ser = serial.Serial('/dev/tty.usbserial-1410')
+pH_new = float(ser.read(6))
+
+while True:
+  pH_old = pH_new
+  
+  pH_new = float(ser.read(6))
+  pH_diff = abs(pH_new - pH_old)
+  
+  if pH_diff < 0.01:
+    ser.write(b'Cal,high,10.00\r')
+    ser.read(2)
+```
+
+```{python eval=FALSE, include=FALSE}
+# The interactive interface is in the ComputingProject.py file because R will not run the interactive interface. This code block shows how the interface is run
+print("Enter total amount of ___ added")
+
+# inputting the total volume
+volume = input("Enter total volume:")
+print(f'Total volume: {volume}')
+```
+
+```{python}
+import csv
+
+fields = ['Volume', 'pH']
+
+```
+
