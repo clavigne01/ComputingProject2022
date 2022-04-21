@@ -85,6 +85,19 @@ output: html_document
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 ### Description
 Caileigh Lavigne, Dereck Jernigan, and Ben Hudgens, will be writing a program that will monitor the pH of a reaction, while calculating the pKa, Ka, and the concentration of the unknown solution. 
 
@@ -96,6 +109,14 @@ I have added a table to R Markdown, eventually the coded equations will be inser
 ## Caileigh Lavigne
 I have located the pH meter that will be used for this project. I have also began looking at material that will help me better understand how to communicate with the pH meter, as well as receive its output data.
 
+```{r}
+import csv
+with open('_____', 'w', newline='') as csvfile:
+    _____ = csv.writer(csvfile, delimiter=' ',
+                            quotechar='|', quoting=csv.QUOTE_MINIMAL)
+   ______.writerow(['_____'] * 5 + ['_____'])
+    _____.writerow(['_____', '______', '_____'])
+```
 
 ```{r}
 pHdata <- read.table("_____",header = TRUE)
