@@ -25,7 +25,8 @@ while True:
   pH_diff = abs(pH_new - pH_old)
   
   if pH_diff < 0.01:
-    
+    ser.write(b'R\r')
+    float(ser.read(6))
     break
 ```
 
@@ -45,6 +46,7 @@ while True:
   if pH_diff < 0.01:
     ser.write(b'Cal,mid,7.00\r')
     ser.read(2)
+    break
 ```
 
 ```{python}
@@ -62,6 +64,7 @@ while True:
   if pH_diff < 0.01:
   ser.write(b'Cal,low,4.00\r')
   ser.read(2)
+  break
 ```
 
 ```{python}
@@ -79,21 +82,16 @@ while True:
   if pH_diff < 0.01:
     ser.write(b'Cal,high,10.00\r')
     ser.read(2)
+    break
 ```
 
 ```{python eval=FALSE, include=FALSE}
 # The interactive interface is in the ComputingProject.py file because R will not run the interactive interface. This code block shows how the interface is run
-print("Enter total amount of ___ added")
+print("Enter total amount of titrant added")
 
 # inputting the total volume
 volume = input("Volume:")
 print(f'Total volume: {volume}')
 ```
 
-```{python}
-import csv
-
-fields = ['Volume', 'pH']
-
-```
 
