@@ -86,12 +86,26 @@ while True:
 ```
 
 ```{python eval=FALSE, include=FALSE}
-# The interactive interface is in the ComputingProject.py file because R will not run the interactive interface. This code block shows how the interface is run
+# The interactive interface is in the ComputingProject.py file because R will not run the interactive interface. This code block shows how the interface is run in the python script
 print("Enter total amount of titrant added")
 
 # inputting the total volume
 volume = input("Volume:")
-print(f'Total volume: {volume}')
+print("Volume: {0} mL".format(volume))
+
+with open('ComputingProject.csv', 'w', newline='') as csvfile:
+  compwriter = csv.writer(csvfile, delimiter=' ',
+                            quotechar='|', quoting=csv.QUOTE_MINIMAL)
+  compwriter.writerow(['Volume'], ['pH'])
+  
+
+  while volume != ""
+    ser.write(b'R\r')
+    pH = float(ser.read(8))
+  
+    compwriter.writerow([volume, pH])
+
+    volume = input("Volume:")
 ```
 
 
