@@ -18,8 +18,6 @@ with open('ComputingProject.csv', 'w', newline='') as csvfile:
     ser.write(b'R\r')
     pH = float(ser.read(8))
   
-
- 
     compwriter.writerow([volume, pH])
 
     volume = input("Volume:")
