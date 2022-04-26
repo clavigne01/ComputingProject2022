@@ -1,6 +1,6 @@
 import serial
 import csv
-ser = serial.Serial('/dev/tty.usbserial-1410')
+ser = serial.Serial('/dev/tty.usbserial-1420')
 
 print("Enter total amount of titrant added")
 
@@ -11,12 +11,12 @@ print("Volume: {0} mL".format(volume))
 with open('ComputingProject.csv', 'w', newline='') as csvfile:
   compwriter = csv.writer(csvfile, delimiter=' ',
                             quotechar='|', quoting=csv.QUOTE_MINIMAL)
-  compwriter.writerow(['Volume'], ['pH'])
+  compwriter.writerow(['Volume', 'pH'])
   
 
-  while volume != ""
+  while volume != "":
     ser.write(b'R\r')
-    pH = float(ser.read(8))
+    pH = float(ser.read(6))
   
     compwriter.writerow([volume, pH])
 
