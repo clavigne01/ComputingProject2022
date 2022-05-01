@@ -1,0 +1,95 @@
+---
+title: "Progress ReportII"
+author: "Dereck J, Caileigh L, Ben H"
+date: "4/18/2022"
+output: html_document
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```{r}
+pHdata <- read.table("pH.data",header = TRUE)
+pHdata <- read.table(header=TRUE, text="
+Unknown     pH     pKa     pOH     Concentration
+1            0      0       0          0
+2            0      0       0          0
+3            0      0       0          0
+4            0      0       0          0
+5            0      0       0          0"
+)
+```

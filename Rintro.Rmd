@@ -1,0 +1,305 @@
+---
+title: "Basics of R"
+output: html_document
+---
+
+# R Data Structures
+
+R has many of the same data types that are present in other languages, such as strings (called character strings in R), numeric values and logical values. Often, values of the same type are combined together in a structure called a *vector*. The most basic way to create a vector is by giving the values as arguments to the *c* function, which creates the vector from those values.
+
+```{r}
+mynumbers <- c(1, 19.7, 4.2, 85, 12.4)
+mynumbers
+```
+
+Operations on vectors are usually performed element-wise, as should be evident in the following examples.
+
+```{r}
+mynumbers
+mynumbers * 3
+mynumbers + 2.5
+mynumbers + c(5, 3, 4, -20, 7)
+mynumbers * 1:5
+1:5
+```
+
+Comparison operators can be used to create a vector of logical values.
+
+```{r}
+mynumbers
+mynumbers > 20
+```
+
+Subsets of vectors can be accessed by providing another vector within square brackets after the name of the vector.
+
+```{r}
+mynumbers
+mynumbers[2]
+mynumbers[2:4]
+mynumbers[c(3,1,5)]
+mynumbers[mynumbers > 15]
+```
+
+Data in R can also be organized into lists, which contain an ordered group of elements (including vectors and other lists) that are not necessarily of the same type. These elements may be optionally named, in which case the elements may be accessed by name or by number. A special type of list, in which all the elements have the same length, is called a *data frame*, and is a particularly useful arrangement of data.
+
+Data frames can be created using the data.frame function, but it's more common to generate data in another program and read it into R using the *read.table* function. This function takes as it's main argument the name of a text file containing lines of data separated by spaces (whitespace to be particular), and creates a data frame with each column of data as an element in the data frame. There are also several optional arguments, including whether the first line of the file contains column names, what character(s) separate data in a line, and how many lines to read from the file. There's also an argument to supply text, if you didn't want to create a separate text file with the data. A few of these options are shown in the examples below.
+
+```{r}
+mileagedata <- read.table("gasoline.data",header = TRUE)
+duckframe <- read.table(header=TRUE, text="
+blind         species        paddling
+HollowGrove   Mallard        21
+MarshaMarsha  Eider          19
+HollowGrove   Eider          12
+MarshaMarsha  Mallard        14
+HollowGrove   Mallard        18
+MarshaMarsha  Eider          20
+HollowGrove   Eider          13
+MarshaMarsha  Mallard        11
+HollowGrove   Mallard        20
+MarshaMarsha  Eider          22
+HollowGrove   Eider          13
+MarshaMarsha  Mallard        12")
+```
+
+When the read.table function reads a vector of strings, it converts the vector to a structure called a *factor*. Factors are much like vectors, but they also keep track of the unique values, called *levels*, in the factor. This type of data structure is particularly useful when the column represents different categories into which each row may be grouped.
+
+```{r}
+duckframe$species
+```
+
+# Creating Plots in R
+
+## Base Graphics
+
+R comes with several functions to create plots of data. These functions are
+described in the *graphics* section of the package index in the help. In many
+cases, only one function is required to create a plot, the *plot* function.
+The plot function can create different types of plots based on the type of
+data it is supplied. The function can also deduce several reasonable default
+values for different components of the plot.
+
+The most conceptually familiar approach to creating a plot is to supply two
+sets of numbers, a set for the x values and a set for the y values. These
+can be supplied to the plot function as a pair of vectors.
+
+```{r}
+plot(mileagedata$ppg, mileagedata$mpg)
+```
+
+Because these vectors must have the same length, and because they are usually
+associated with each other, these vectors will often be a part of a data frame.
+In this case, it is often helpful to provide the vectors to the function in
+the form of a *formula*. You can often consider a formula to be a representation
+of a y variable (or response variable) as a function of x variables (or 
+determining variables). For this type of representation, the data frame which
+contains these variables must also be provided to the function.
+
+```{r}
+plot(mpg~ppg, data=mileagedata)
+```
+
+When a numeric vector is plotted as a function of a factor, a different type
+of plot is created.
+
+```{r}
+plot(mpg~fuel, data=mileagedata)
+```
+
+The plot function has several parameters, most of which have default values
+that work reasonably well. Different arguments can be supplied to these
+parameters to change different aspects of the plot. A full list of the
+parameters can be found in the help for the plot function.
+
+```{r}
+plot(ppg~station, data=mileagedata, ylabel="Price ($/gallon)")
+```
+
+More complex plots can be created by combining the plot function with other
+functions that make modifications to an existing plot. The following plot will
+start with an empty plot, in order to create a plot with appropriate ranges
+for the x and y values of all the points.
+
+```{r}
+plot(mpg~ppg, data=mileagedata, type="n")
+points(mpg~ppg, data=mileagedata, subset=(fuel=="Unleaded87"), pch=21, bg="blue")
+points(mpg~ppg, data=mileagedata, subset=(fuel=="E10"), pch=22, bg="green")
+legend("topleft", legend=c("Unleaded87","E10"), pch=21:22, pt.bg=c("blue","green"))
+```
+
+
+## ggplot2
+
+The graphics functions in the *ggplot2* package represent a different approach
+to creating a plot than the base graphics functions. These functions can be
+accessed by loading the package with the *library* function.
+
+```{r}
+library(ggplot2)
+```
+
+The ggplot2 functions use a "grammar of graphics" approach to create the plot
+(hence the name). This process starts by creating an object from a set of data,
+and add additional components of a graph in an expression like a math expression.
+The plot can be stored in a variable, which can serve as the basis for
+adding more components to the plot. These functions allow the creation of a
+fairly complex plot with a few functions.
+
+```{r}
+ggplot(mileagedata, aes(ppg, mpg, color=fuel, shape=station)) + geom_point()
+```
+
+The grammar of graphics is somewhat flexible, as the graphics aesthetics (like
+color, shape and others) can be supplied either to the main graph or to individual
+components of the plot. Be advised, though, that just like with normal grammar,
+variations in placement of instructions can sometimes have different meanings.
+
+```{r}
+ggplot(mileagedata, aes(mpg, ppg)) + geom_point(aes(color=fuel, shape=station))
+```
+
+The grammar of graphics used by ggplot2 has a complexity that takes a while to
+master, so this can definitely serve primarily as an introduction to this
+package. There are several tutorials online that can also be used to increase
+your understanding of this approach.
+
+## ggpubr
+
+The ggplot2 package produces plots that have a fairly high degree of information
+with a relatively small number of functions. In this sense, ggplot2 plots are
+a good resource for visualization for data *exploration*. However, the plots
+are generally not formatted in a way that is appropriate for *publication*.
+Furthermore, the changes that would be required to make the plots
+publication-ready are not trivially easy to make in ggplot2. Other R packages
+have been developed to address this shortcoming in ggplot2. One of the more
+useful packages in this regard is ggpubr. As the name suggests, the package was
+designed to use the approach of ggplot2 to make publication quality plots.
+
+```{r}
+library(ggpubr)
+```
+
+The approach used by ggpubr is similar to ggplot, in that a plot is created
+by starting with a data frame and defining the x and y axes. However, while
+ggplot2 starts with a single function (ggplot) and adds points and other
+components to the plot, ggpubr starts with different functions depending on the
+type of plot to be created.
+
+```{r}
+fuelplot <- ggboxplot(mileagedata, x="fuel", y="ppg")
+fuelplot
+```
+
+Plots created with ggpubr start with a style that is more amenable to publication
+than ggplot2, but there are also several color palattes that are specifically
+designed for different scientific journals (and other more whimsical targets).
+
+```{r}
+set_palette(fuelplot, palette="aaas")
+```
+
+In addition, ggpubr allows simple statistical evaluations to be added to a
+plot.
+
+```{r}
+fuelplot + stat_compare_means(comparisons = list(c("E10", "Unleaded87")),
+                              method="t.test")
+```
+
+# Statistical Analysis in R
+
+In addition to standard arithmetic functions and operators, R ships with several functions to perform statistical analyses of data. Other statistical tools are available for installation (see Additional Packages below). These functions are often flexible in their inputs, so there can be more than one way to organize your data to use the function, and more than one way to call the function with your data. Generally, though, R functions are geared toward a data frame arrangement of data.
+
+## Student's T-test
+
+One of the most common tools to identify statistical significance is Student's T-test. This test uses averages, standard deviations and numbers of samples to determine whether a set of values are different from a "true" value (one-sample), or whether two sets of values are different from each other (two-sample). The T-test can also be used to compare individual samples in two different conditions, in which case the data points are paired. R performs all of these tests using the t.test function.
+
+The t.test function can be supplied with two numeric vectors to perform a two-sample test. Two-sample t-tests can be performed by providing two numeric vectors to the function, or by using a *formula* interface. To use a formula in the t.test function, data must be in a data frame, and one of the columns of the data frame must be a factor with two levels that correspond to the two groups you want to compare. An example of each method is supplied below. The first gives two numeric vectors, the second supplies a formula to the function.
+```{r}
+mileagedata$fuel=="Unleaded87"
+```
+
+```{r}
+t.test(mileagedata$mpg[mileagedata$fuel=="Unleaded87"],
+       mileagedata$mpg[mileagedata$fuel=="E10"])
+t.test(paddling~blind, data=duckframe)
+```
+
+There are several optional arguments to the t.test function. One-sample T-tests use the mu argument to indicate the expected value for the mean, and paired T-tests use paired=TRUE to change the means by which the values are compared (paired T-tests also need to have the same length, so using two columns in a data frame works well for these). Other optional parameters include setting the confidence interval and the alternative hypothesis, although the defaults are usually appropriate.
+
+The t.test function doesn't return a value, but it prints the results of the test to the console (or Markdown document in the case of RStudio). There's generally not a lot more to do with the information in a T-test than to read the results, anyway.
+
+## Analysis of Variance
+
+For data with more than one category, or for data with multiple determining variables, a T-test is often insufficient. Analysis of variance is a technique similar to a T-test, but accounting for variation among several different categories, and potentially looking at interactions between determining variables. In R, the *aov* function is usually used to perform an analysis of variance. 
+
+Analysis of variance often requires additional data extraction, so unlike the T-test, the results of the aov function create an object that can be used as the argument for other functions. This is definitely a different approach than other statistical programs, but is very convenient once you understand it.
+
+```{r}
+gasstations <- aov(ppg~station, data=mileagedata)
+summary(gasstations)
+duckblind <- aov(paddling~blind, data=duckframe)
+summary(duckblind)
+duckblindspecies <- aov(paddling~blind*species,
+                        data=duckframe)
+summary(duckblindspecies)
+```
+
+When a significant difference is found in the analysis of variance, the TukeyHSD function can be used to identify which pairs of categories have the significant differences. The function returns an object that can be printed or plotted.
+
+```{r}
+duckTukey <- TukeyHSD(duckblindspecies)
+duckTukey
+plot(duckTukey)
+```
+
+## Linear Models
+
+When a determining variable and a response variable are both numeric, it is often appropriate to establish whether a mathematical relationship exists between the two variables. The simplest relationship between two numeric variables is a linear relationship, and R can determine whether a linear relationship exists using a *linear model*. This is calculated using the *lm* function. This function calculates slopes and intercepts, but also provides a measure of uncertainty in the values. Also like the aov function, the output can be used as an argument for other functions, so the output of the lm function is usually stored in a variable.
+
+```{r}
+mpgmodel <- lm(mpg~ppg, data=mileagedata)
+summary(mpgmodel)
+plot(mpg~ppg, data=mileagedata)
+abline(mpgmodel)
+```
+
+In addition to the lm function, the glm function can determine a linear model for variables that aren't directly linearly related, but which can be transformed to a linear relationship using a common function. The nls function can calculate a nonlinear model for the data, provided the form of the model and appropriate starting guesses for the parameters in the model.
+
+# Additional Packages
+
+R has several built-in functions to read, analyze and display data, but there are many other functions created for R to perform different analyses, read different types of data, or display data in a new manner. Many of these are available in the Comprehensive R Archive Network (CRAN), which also distributes the R program itself.
+
+Packages that are available on CRAN can be found on the [CRAN webpage](http://cran.r-project.org). The package list can be browsed by name or by area of interest (Task Views). The website (with the packages) can also be searched to find packages of interest. When you find a package to install, the *install.packages* command is used from the console to install the package by name. Alternatively, RStudio has menu options for installing packages from the repositories. The code block below installs the Rpdb package, which can be used to read and perform calculations on Protein Data Bank files.
+
+```{r}
+install.packages("Rpdb")
+```
+
+When a package has been successfully installed, the functions in the package can be made available using the *library* function. This process of installing and making packages available is how RStudio can communicate with SQL databases, by using a package written to communicate with a database (RSQLite in our case). 
+
+```{r}
+library(RSQLite)
+connection <- dbConnect(dbDriver("SQLite"),
+                        dbname="commute.db")
+alltrips <- dbGetQuery(connection,
+                       paste("SELECT destination, street, duration",
+                             "FROM trip NATURAL JOIN route"))
+# Analysis of variance just based on street.
+street <- aov(duration ~ street, data = alltrips)
+summary(street)
+```
+
+The following code block makes the functions in Rpdb available, and uses them to read a PDB file into a data frame and display the structure of the protein.
+
+```{r}
+library("Rpdb")
+lysozyme <- read.pdb("1bna.pdb")
+basepairs <- subset(lysozyme$atoms, !grepl("^O?P|'$", lysozyme$atoms$elename))
+basepairs$bp <- basepairs$resid
+basepairs$bp[basepairs$chainid=="B"] <- 25 - basepairs$bp[basepairs$chainid=="B"]
+stacking <- lm(x3~x1+x2+bp, data=basepairs)
+summary(stacking)
+```
+
+Other entities also create packages for use in R, but do not make these packages available through CRAN. Probably the most popular of these is the Bioconductor project that is used to analyze genomic data. Of course, anyone is allowed to write new packages for R; there are several tools available in R to facilitate this process.

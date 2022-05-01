@@ -1,0 +1,186 @@
+---
+title: "Python Intro"
+output: html_notebook
+---
+
+# Data Types, Variables and Functions
+
+As we learn about the basics of programming as illustrated in Python, it will be helpful to recognize some of the different data types (kinds of values) that are commonly used in programming. Some of the most important data types in Python are:
+ - Integers
+ - Floating Point Numbers (floats)
+ - Strings
+ - Boolean (logical) values
+In addition to the simple data types, there are a few data types that are used to group the simple types together. The compound data types that we will encounter most often in Python are:
+
+- List
+- Sequence
+- Dictionary
+ 
+ The data represented by these data types are often stored in *variables*, usually by *assignment*. The data in variables (and other data) is often manipulated by *functions*. Important concepts that frequently arise in the context of functions:
+ 
+ - Parameters
+ - Arguments
+   + Default values
+ - Output (Return Value)
+ - Side Effect
+ 
+# Statements, Functions, Loops and Conditionals
+
+The predominant paradigm for programming, called *structured programming*, says that all programming languages will have the following characteristics:
+
+  1. The ability to execute instructions in sequence.
+  2. The ability to follow different instructions based on the evaluation of conditions.
+  3. The ability to perform a set of instructions repeatedly.
+  4. The ability to divide up instructions into modules that can be executed as necessary.
+Note that not every program written in these languages will use all these features, but the language itself should have all these capabilities.
+
+In Python, instructions are executed in the order they appear in the program. An instruction normally ends when the line on which the instruction is written ends. There are exceptions to this, but normally each line is an instruction.
+
+The most common construct to conditionally execute instructions is the *if* statement. The word "if" is followed by a logical expression (that evaluates to True or False), and a set of instructions that are executed if the statement is true. These instructions are grouped together by indenting the conditional instructions. "If" statements are optionally followed by "else" statements that provide a set of instructions to execute if the logical expression evaluates to False.
+
+The most common form of repetition in Python programs involves a *for* statement. The "for" keyword is provided with a list of values[^1] that are assigned to a variable. The statement is followed by a group of (indented) instructions that are executed for each value in the list. Groups of statements can also be looped with a *while* statement, which evaluates a logical expression at the beginning of the loop and executes the loop until the expression evaluates to False.
+
+Python programs can be divided up by writing functions that are called by other parts of the program. These functions can be a part of the program itself, or they can be written in other files and subsequently made available with an *import* statement. Python comes with many functions that have been organized into *modules*, and other modules and functions have been created by other parties.
+
+All four of the components of programming languages are illustrated in the program below. Look for the conditional statements, loops and functions, and see if you can figure out what the different parts of the program do.
+
+```{python}
+# This program generates a rainbow using Turtle graphics. The rainbow
+# isn't a bow; it's more of a prismatic diagram of color.
+
+import turtle
+
+#Get turtle positioned to color
+turtle.home()
+turtle.colormode(255)
+turtle.penup()
+turtle.backward(300)
+turtle.left(90)
+turtle.pendown()
+
+# Define a function for drawing lines while changing a specific color
+def rampcolor(colordict, channel, increasing=True):
+    """Takes a dictionary of color settings and the string describing one
+    of the channels, and adjusts that channel through the range of the
+    channel. Defaults to increasing the channel, but can adjust downward if
+    the increasing parameter is set to False."""
+    if increasing:
+        colorlist = range(0,255,5)
+    else:
+        colorlist = range(255,0,-5)
+    for x in colorlist:
+        colordict[channel] = x
+        turtle.pencolor((colordict['r'], colordict['g'], colordict['b']))
+        turtle.forward(100)
+        if (x % 10 == 0):
+            turtle.right(90)
+            turtle.forward(1)
+            turtle.right(90)
+        else:
+            turtle.left(90)
+            turtle.forward(1)
+            turtle.left(90)
+
+# Create the dictionary of colors. Red is on full, green and blue are off.
+colors = {'r':255, 'g':0, 'b':0}
+rampcolor(colors, 'g')
+rampcolor(colors, 'r', False)
+rampcolor(colors, 'b')
+rampcolor(colors, 'g', False)
+rampcolor(colors, 'r')
+```
+
+# Object-Oriented Programming
+
+A popular enhancement of structured programming is object-oriented programming, which collects related variables and functions together into an *object*. The variables and functions of an object, called *attributes* and *methods*, respectively, are defined as a *class*. Objects are then created as *instances* of the class. This often makes it conceptually easier to perform actions on collections of data.
+
+Object-oriented programming is deeply embedded in Python. Many of the main data types (such as strings, lists, and dictionaries) are objects in Python, and have their own associated methods. The standard library also defines several classes for different purposes, and users also have the option of defining their own classes. Attributes and methods in Python are accessed by following the name of the object with a period and the name of the attribute or method. 
+
+The code below defines a new class of Turtle, and instantiates that class with an object (called franklin). This particular class definition takes advantage of a concept called *inheritance*, which means that franklin can do everything a normal (computer) turtle can do, plus a new activity. Try running the program below, and then change the instructions to make franklin do different things, or even to create another turtle!
+
+```{python}
+import turtle
+from time import sleep
+
+class TurtleGon(turtle.Turtle):
+    def colorgon(self, colorlist, side=50, fillcolor=None):
+        angle = 180 - 180 * (len(colorlist) - 2) / len(colorlist)
+        if fillcolor is not None:
+            self.fillcolor(fillcolor)
+            self.begin_fill()
+        for color in colorlist:
+            self.pencolor(color)
+            self.forward(side)
+            self.left(angle)
+        if fillcolor is not None:
+            self.end_fill()
+        return
+
+franklin = TurtleGon()
+franklin.colorgon(["blue","red","green","green","orange"])
+sleep(5)
+```
+
+# Biopython
+
+There have been a large number of modules for Python that have been created for scientific computing. The [SciPy](http://www.scipy.org) project has compiled several different modules for science, math and engineering. Another project of interest, which leverages the functionality of SciPy (NumPy in particular), is [Biopython](http://biopython.org). Biopython is geared toward computational molecular biology. Much of the documentation is geared around sequence analysis, but there are several modules available.
+
+The program below searches for primer sequences in a file called sequence.gb, in GenBank format.
+
+```{python}
+# This program reads in a sequence from a GenBank file and the sequences
+# of primers (in EMBOSS's primersearch format) used to amplify a region
+# of the DNA in the sequence file. The program outputs this sequence to
+# another file in FASTA format. This version will only analyze one sequence
+# and one primer set, and will output only the largest sequence that would
+# be amplified by that primer set. The program could easily be modified to
+# accommodate more than one sequence and more than one set of primers.
+
+# This will rely heavily on Biopython's sequence file parsers.
+from Bio import SeqIO
+
+# Create a dictionary with set name, forward primer sequence
+# and reverse primer sequence.
+primers = {"set":"rs2472304", "forward":"CTAGGGCCAGAGAAAGCTAATG",
+             "reverse":"GGATGGTGAAGGGCAAGAA"}
+
+# Find the primers in the sequence record. If the forward primer is in
+# the sequence, create a new sequence that starts at the position where
+# the forward primer is located. Then reverse the sequence, and find the
+# position of the reverse primer. Create a sequence of the reversed sequence
+# that starts at the position of the reverse primer. The reverse of this
+# truncated sequence is the sequence that will be amplified in PCR, in
+# the direction of the forward primer.
+#
+# If the forward primer is not found in the sequence, the sequence is
+# calculated as before, starting with the reverse primer. The truncated
+# sequence is still reported in the direction of the forward primer, though.
+
+for fullsequence in SeqIO.parse('sequence.gb', 'genbank'):
+    forwardpos = fullsequence.seq.find(primers['forward'])
+    if forwardpos >= 0:
+        forwardseq = fullsequence[forwardpos:]
+        reverseseq = forwardseq.reverse_complement()
+        reversepos = reverseseq.seq.find(primers['reverse'])
+        if reversepos >= 0:
+            pcrsequence = reverseseq[reversepos:].reverse_complement()
+            pcrsequence.id = primers['set']
+            pcrsequence.description = "{0} bp amplimer".format(len(pcrsequence))
+            print(pcrsequence.format("fasta"))
+    else:
+        reversepos = fullsequence.seq.find(primers['reverse'])
+        if reversepos >= 0:
+            reverseseq = fullsequence[reversepos:]
+            forwardseq = reverseseq.reverse_complement()
+            forwardpos = forwardseq.seq.find(primers['forward'])
+            if forwardpos >= 0:
+                pcrsequence = forwardseq[forwardpos:]
+                pcrsequence.id = primers['set']
+                pcrsequence.description = "{0} bp amplimer".format(len(pcrsequence))
+                print(pcrsequence.format("fasta"))
+
+```
+
+There are more examples of the use of Biopython on the website, and additional examples are being created.
+
+[^1]: Technically, it uses an iterator, which produces values one at a time until it reaches a stopping point. A list serves as an iterator by providing each item from the list until it runs out of items.
