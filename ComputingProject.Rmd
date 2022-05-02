@@ -6,7 +6,7 @@ output: html_document
 ---
 
 
-```{python}
+```{python eval=FALSE, include=FALSE}
 # This code shows how to connect to the pH meter and communicate with it
 import serial
 ser = serial.Serial('/dev/tty.usbserial-1420')
@@ -14,7 +14,7 @@ print(ser.baudrate)
 print(float(ser.read(6)))
 ```
 
-```{python}
+```{python eval=FALSE, include=FALSE}
 # Possible loop to stabilize the pH readings before calibrations
 import serial
 ser = serial.Serial('/dev/tty.usbserial-1420')
