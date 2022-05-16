@@ -1,38 +1,10 @@
 ---
 title: "pH Meter Project"
-author:
+author: "Caileigh L., Dereck J., and Ben H."
 date: 
 output: html_document
 ---
-
-
-```{python eval=FALSE, include=FALSE}
-# This code shows how to connect to the pH meter and communicate with it
-import serial
-ser = serial.Serial('/dev/tty.usbserial-1420')
-print(ser.baudrate)
-print(float(ser.read(6)))
-```
-
-```{python eval=FALSE, include=FALSE}
-# Possible loop to stabilize the pH readings before calibrations
-import serial
-ser = serial.Serial('/dev/tty.usbserial-1420')
-
-pH_new = float(ser.read(6))
-
-while True:
-  pH_old = pH_new
-  
-  pH_new = float(ser.read(6))
-  pH_diff = abs(pH_new - pH_old)
-  
-  if pH_diff < 0.01:
-    ser.write(b'R\r')
-    print(float(ser.read(6)))
-    break
-```
-
+When you are connecting to the pH meter, make sure to locate the serial port that is connected to the pH meter. That serial port will be added to the line of code where is says "ser".
 
 ```{python}
 # This code runs the first calibration of the pH meter
