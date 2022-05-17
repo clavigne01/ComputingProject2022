@@ -1,10 +1,11 @@
 ---
 title: "pH Meter Project"
 author: "Caileigh L., Dereck J., and Ben H."
-date: 
 output: html_document
 ---
-When you are connecting to the pH meter, make sure to locate the serial port that is connected to the pH meter. That serial port will be added to the line of code where is says "ser".
+The pH meter used for this program was the Atlas Scientific EZO pH circuit. The commands were taken directly from the manual given by Atlas Scientific.
+
+When you are connecting to the pH meter, make sure to locate the serial port that is associated with the pH meter. That serial port should be added to the line of code where is says "ser".
 
 ```{python}
 # This code runs the first calibration of the pH meter
@@ -23,6 +24,8 @@ while True:
     print(ser.read(3))
     break
 ```
+
+In between each of the calibrations, make sure to rinse the probe with deionized water and to completely dry the probe before placing it into the next solution.
 
 ```{python}
 # This code runs the second calibration of the pH meter
@@ -84,6 +87,7 @@ with open('ComputingProject.csv', 'w', newline='') as csvfile:
 ```
 
 ```{python}
+# The data from the pH meter found in the ComputingProject.csv file is graphed with this code block.
 import matplotlib.pyplot as plt
 import pandas as pd
 import csv
